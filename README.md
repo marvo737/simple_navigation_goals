@@ -1,2 +1,2 @@
-# ros-package-template
-The template repository for ROS package
+# simple_navigation_goals
+
