@@ -1,0 +1,10 @@
+name: CI for ROS package
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  linter:
+    name: Linter
+    uses: sbgisen/.github/.github/workflows/linter_ros_package.yaml@main
