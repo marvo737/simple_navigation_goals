@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(simple_navigation_goals)
 
+add_definitions(-std=c++11)
+
 find_package(
   catkin REQUIRED
   COMPONENTS actionlib
