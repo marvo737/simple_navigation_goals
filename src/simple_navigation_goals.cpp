@@ -12,8 +12,13 @@ int main(int argc, char** argv)
   // tell the action client that we want to spin a thread by default
   MoveBaseClient ac("move_base", true);
 
-  float MAX_val = 2.0;
-  float MIN_val = -2.0;
+  float MAX_val = 5.0;
+  float MIN_val = -5.0;
+
+  move_base_msgs::MoveBaseGoal goal;
+  std::random_device rd;
+  std::default_random_engine eng(rd());
+  std::uniform_real_distribution<> distr(MIN_val, MAX_val);
 
   // wait for the action server to come up
   while (!ac.waitForServer(ros::Duration(5.0)))
@@ -23,24 +28,16 @@ int main(int argc, char** argv)
 
   while (true)
   {
-    move_base_msgs::MoveBaseGoal goal;
-
-    goal.target_pose.header.frame_id = "map";
+    goal.target_pose.header.frame_id = "odom";
     goal.target_pose.header.stamp = ros::Time::now();
-
-    // Generated random value
-    std::random_device rd;
-    std::default_random_engine eng(rd());
-    std::uniform_real_distribution<> distr(MIN_val, MAX_val);
-
     goal.target_pose.pose.position.x = distr(eng);
     goal.target_pose.pose.position.y = distr(eng);
     goal.target_pose.pose.orientation.w = 1.0;
 
     ROS_INFO("target_x:%f, target_y:%f", goal.target_pose.pose.position.x, goal.target_pose.pose.position.y);
     ROS_INFO("Sending goal");
-    ac.sendGoal(goal);
 
+    ac.sendGoal(goal);
     ac.waitForResult();
 
     if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
